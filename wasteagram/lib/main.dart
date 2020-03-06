@@ -77,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: StreamBuilder(
-          stream: Firestore.instance.collection('posts').orderBy('date').snapshots(),
+          stream: Firestore.instance.collection('posts').orderBy('date', descending: true).snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
