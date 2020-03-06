@@ -25,21 +25,21 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      home: MyHomePage(title: 'Wasteagram'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
+  MyHomePage({Key key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  var totalWasted = 0;
 
   void onTapped(post) async {
     print(post);
@@ -71,23 +71,29 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text('Wasteagram - $totalWasted'),
       ),
       body: Center(
         child: StreamBuilder(
           stream: Firestore.instance.collection('posts').orderBy('date', descending: true).snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              totalWasted = 0;
               return ListView.builder(
                 padding: EdgeInsets.all(8),
                 itemCount: snapshot.data.documents.length,
-                itemBuilder: (context, index) =>
-                  _buildListItem(context, snapshot.data.documents[index])
+                itemBuilder: (context, index) {
+                  totalWasted += snapshot.data.documents[index]['quantity'];
+                  return _buildListItem(context, snapshot.data.documents[index]);
+                }
               );
             } else {
-              return const Text('Loading...');
+              return Center(
+                  child: CircularProgressIndicator()
+              );
             }
           },
         ),
