@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../models/post.dart';
+
 class Details extends StatelessWidget {
   static const routeName = 'Details';
-  final DocumentSnapshot document;
+  final Post post;
 
-  Details({Key key, @required this.document}) : super(key: key);
+  Details({Key key, @required this.post}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +18,10 @@ class Details extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              DateHeadline(date: document['date']),
-              Image(imageURL: document['imageURL']),
-              Quantity(quantity: document['quantity']),
-              Coords(lat: document['latitude'], long: document['longitude'])
+              DateHeadline(date: post.date),
+              Image(imageURL: post.imageURL),
+              Quantity(quantity: post.quantity),
+              Coords(lat: post.latitude, long: post.longitude)
             ],
           ),
         );

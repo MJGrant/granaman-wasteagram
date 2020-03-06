@@ -58,17 +58,15 @@ class _MyHomePageState extends State<MyHomePage> {
     return timestampFormat.format(timestampParsed).toString();
   }
 
-  void onTapped(document) {
+  void onTapped(post) {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => Details(document: document),
+          builder: (context) => Details(post: post),
         ));
-    //await Navigator.pushNamed(context, 'Details', arguments: {'document': document});
   }
 
-  Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
-    Post post = Post(document);
+  Widget _buildListItem(BuildContext context, Post post) {
 
     return ListTile(
       title: Row(children: [
@@ -84,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ))
       ]),
       subtitle: Text(formatTimestamp(post.date)),
-      onTap: () => onTapped(document),
+      onTap: () => onTapped(post),
     );
   }
 
@@ -107,9 +105,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding: EdgeInsets.all(8),
                   itemCount: snapshot.data.documents.length,
                   itemBuilder: (context, index) {
-                    totalWasted += snapshot.data.documents[index]['quantity'];
+                    Post post = Post(snapshot.data.documents[index]);
+                    totalWasted += post.quantity;
                     return _buildListItem(
-                        context, snapshot.data.documents[index]);
+                        context, post);
                   });
             } else {
               return Center(child: CircularProgressIndicator());
