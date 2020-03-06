@@ -41,9 +41,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   var totalWasted = 0;
 
-  void onTapped(post) async {
-    print(post);
-    await Navigator.pushNamed(context, 'Details', arguments: {'post': post}); //print(post);
+  void onTapped(document) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Details(document: document),
+      )
+    );
+    //await Navigator.pushNamed(context, 'Details', arguments: {'document': document});
   }
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
@@ -63,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         ]
       ),
-      onTap: () => onTapped(document['data']),
+      onTap: () => onTapped(document),
     );
   }
 
