@@ -67,6 +67,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: StreamBuilder(
-          stream: Firestore.instance.collection('posts').snapshots(),
+          stream: Firestore.instance.collection('posts').orderBy('date').snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
