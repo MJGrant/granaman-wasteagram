@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Details extends StatelessWidget {
@@ -26,13 +27,21 @@ class Details extends StatelessWidget {
 }
 
 class DateHeadline extends StatelessWidget {
+
   final String date;
   DateHeadline({this.date});
+
+  String formatDate(date) {
+    var dateParsed = DateTime.parse(date);
+    final DateFormat dateFormat = DateFormat("EEEE, MMM. d yyyy");
+
+    return dateFormat.format(dateParsed).toString();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(date,
+      child: Text(formatDate(date),
           style: Theme.of(context).textTheme.headline),
     );
   }

@@ -1,9 +1,17 @@
-class Post {
-  final String date;
-  final String imageURL;
-  final int latitude;
-  final int longitude;
-  final int quantity;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  Post({this.date:'1970-01-01 0:0:01', this.imageURL:'not found', this.latitude: 100, this.longitude: 200, this.quantity: 99});
+class Post {
+  String date;
+  String imageURL;
+  int latitude;
+  int longitude;
+  int quantity;
+
+  Post(DocumentSnapshot document) {
+    this.date = document['date'];
+    this.imageURL = document['imageURL'];
+    this.latitude = document['latitude'];
+    this.longitude = document['longitude'];
+    this.quantity = document['quantity'];
+  }
 }

@@ -68,14 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
-    // this.date, this.photoURL, this.latitude, this.longitude, this.quantity
-    Post post = Post(
-      date: document['date'],
-      imageURL: document['imageURL'],
-      latitude: document['latitude'],
-      longitude: document['longitude'],
-      quantity: document['quantity'],
-    );
+    Post post = Post(document);
 
     return ListTile(
       title: Row(children: [
