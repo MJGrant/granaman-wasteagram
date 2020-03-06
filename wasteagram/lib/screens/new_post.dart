@@ -6,12 +6,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class NewPost extends StatelessWidget {
   static const routeName = 'newPost';
 
+  final String url;
+
+  NewPost(this.url);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('New Post')),
       body: SingleChildScrollView(
-        child: AddEntryForm(),
+        child: AddEntryForm(url),
       ),
     );
   }
@@ -22,14 +26,21 @@ class PostEntryFields {
 }
 
 class AddEntryForm extends StatefulWidget {
+  final String url;
+
+  AddEntryForm(this.url);
+
   @override
-  _AddEntryFormState createState() => _AddEntryFormState();
+  _AddEntryFormState createState() => _AddEntryFormState(url);
 }
 
 class _AddEntryFormState extends State<AddEntryForm> {
   final formKey = GlobalKey<FormState>();
 
   final postEntryFields = PostEntryFields();
+
+  final String url;
+  _AddEntryFormState(this.url);
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +115,7 @@ class _AddEntryFormState extends State<AddEntryForm> {
 
       Firestore.instance.collection('posts').add({
         'date': DateTime.now().toString(),
-        'imageURL': 'http://test.png',
+        'imageURL': this.url,
         'latitude': 12345,
         'longitude': 98765,
         'quantity': int.parse(postEntryFields.quantity),

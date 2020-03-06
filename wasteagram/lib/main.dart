@@ -8,7 +8,6 @@ import 'screens/new_post.dart';
 import 'screens/photo.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 void main() => runApp(MyApp());
 
@@ -17,7 +16,6 @@ class MyApp extends StatelessWidget {
 
   final routes = {
     Photo.routeName: (context) => Photo(),
-    NewPost.routeName: (context) => NewPost(),
     Details.routeName: (context) => Details(),
   };
 
