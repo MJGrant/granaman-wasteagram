@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String formatDate(date) {
     var dateParsed = DateTime.parse(date);
-    final DateFormat dateFormat = DateFormat("E MMMM. d");
+    final DateFormat dateFormat = DateFormat("EEEE, MMM. d");
 
     return dateFormat.format(dateParsed).toString();
   }
@@ -81,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
       title: Row(children: [
         Expanded(
           child: Text(
-            'date here',
+            formatDate(post.date),
             style: Theme.of(context).textTheme.headline,
           ),
         ),
@@ -90,6 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
               post.quantity.toString(),
         ))
       ]),
+      subtitle: Text(formatTimestamp(post.date)),
       onTap: () => onTapped(document),
     );
   }
