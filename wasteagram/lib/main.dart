@@ -4,6 +4,9 @@ import 'screens/details.dart';
 import 'screens/new_post.dart';
 import 'screens/photo.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -43,7 +46,26 @@ class _MyHomePageState extends State<MyHomePage> {
     await Navigator.pushNamed(context, 'Details', arguments: {'post': post}); //print(post);
   }
 
-  List<String> posts = ['Monday, Feb. 3 (7)', 'Sunday, Feb. 2 (4)'];
+  Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
+    return ListTile(
+      title: Row(
+        children: [
+          Expanded(
+            child: Text(
+              document['date'],
+              style: Theme.of(context).textTheme.headline,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              document['quantity'].toString(),
+            )
+          )
+        ]
+      ),
+      onTap: () => onTapped(document['data']),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,17 +74,20 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: ListView.builder(
-          itemBuilder: (BuildContext context, int index) {
-            var post = posts[index];
-
-            return ListTile(
-              title: Text(post),
-              onTap: () => onTapped(post),
-            );
+        child: StreamBuilder(
+          stream: Firestore.instance.collection('posts').snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                padding: EdgeInsets.all(8),
+                itemCount: snapshot.data.documents.length,
+                itemBuilder: (context, index) =>
+                  _buildListItem(context, snapshot.data.documents[index])
+              );
+            } else {
+              return const Text('Loading...');
+            }
           },
-          itemCount: posts.length,
-          padding: EdgeInsets.all(8),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
