@@ -3,44 +3,53 @@ import 'package:flutter/services.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart' as Path;
+
 class NewPost extends StatelessWidget {
   static const routeName = 'newPost';
-
-  final String url;
-
-  NewPost(this.url);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('New Post')),
       body: SingleChildScrollView(
-        child: AddEntryForm(url),
+        child: AddEntryForm(),
       ),
     );
   }
 }
 
 class PostEntryFields {
+  String photoURL;
   String quantity;
 }
 
 class AddEntryForm extends StatefulWidget {
-  final String url;
-
-  AddEntryForm(this.url);
 
   @override
-  _AddEntryFormState createState() => _AddEntryFormState(url);
+  _AddEntryFormState createState() => _AddEntryFormState();
 }
 
 class _AddEntryFormState extends State<AddEntryForm> {
+  File _image;
+  var image;
+
   final formKey = GlobalKey<FormState>();
 
   final postEntryFields = PostEntryFields();
 
-  final String url;
-  _AddEntryFormState(this.url);
+  Future getImage() async {
+    image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    // updates the preview
+    setState(() {
+      _image = image;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,11 +72,15 @@ class _AddEntryFormState extends State<AddEntryForm> {
   }
 
   Widget _imagePreview() {
-    return Container(
-        width: 300,
-        height: 300,
-        color: Colors.blue,
-        child: Text('Photo')
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        _image == null
+            ? Text('No image selected.')
+            : Image.file(_image),
+        ChoosePhoto(getImage),
+      ]
     );
   }
 
@@ -113,18 +126,43 @@ class _AddEntryFormState extends State<AddEntryForm> {
     if (formState.validate()) {
       formKey.currentState.save();
 
-      Firestore.instance.collection('posts').add({
+      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Creating post...')));
+
+      // todo: add timestamp to name
+      StorageReference storageReference = FirebaseStorage.instance.ref().child(Path.basename(image.path));
+
+      // actually upload the image
+      // do this only when form is valid, and hold the completion until the url is returned
+      StorageUploadTask uploadTask = storageReference.putFile(image);
+      await uploadTask.onComplete;
+      postEntryFields.photoURL = await storageReference.getDownloadURL();
+
+      await Firestore.instance.collection('posts').add({
         'date': DateTime.now().toString(),
-        'imageURL': this.url,
+        'imageURL': postEntryFields.photoURL,
         'latitude': 12345,
         'longitude': 98765,
         'quantity': int.parse(postEntryFields.quantity),
       });
 
-      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Posting...')));
-
       Navigator.popUntil(context, ModalRoute.withName('/'));
     }
+  }
+}
+
+class ChoosePhoto extends StatelessWidget {
+
+  final getImage;
+  ChoosePhoto(this.getImage);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+        child: RaisedButton(
+            child: Text('Choose Photo'),
+            onPressed: getImage
+        )
+    );
   }
 }
 

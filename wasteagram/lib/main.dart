@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   static const routeName = '/';
 
   final routes = {
-    Photo.routeName: (context) => Photo(),
+    Photo.routeName: (context) => NewPost(),
     Details.routeName: (context) => Details(),
   };
 

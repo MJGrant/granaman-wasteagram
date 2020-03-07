@@ -18,20 +18,20 @@ class Details extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              DateHeadline(date: post.date),
-              Image(imageURL: post.imageURL),
-              Quantity(quantity: post.quantity),
-              Coords(lat: post.latitude, long: post.longitude)
+              DisplayDateHeadline(date: post.date),
+              DisplayImage(imageURL: post.imageURL),
+              DisplayQuantity(quantity: post.quantity),
+              DisplayCoords(lat: post.latitude, long: post.longitude)
             ],
           ),
         );
   }
 }
 
-class DateHeadline extends StatelessWidget {
+class DisplayDateHeadline extends StatelessWidget {
 
   final String date;
-  DateHeadline({this.date});
+  DisplayDateHeadline({this.date});
 
   String formatDate(date) {
     var dateParsed = DateTime.parse(date);
@@ -49,31 +49,31 @@ class DateHeadline extends StatelessWidget {
   }
 }
 
-class Image extends StatelessWidget {
+class DisplayImage extends StatelessWidget {
   final String imageURL;
-  Image({this.imageURL});
+  DisplayImage({this.imageURL});
 
   @override
   Widget build(BuildContext context) {
-    return Text(imageURL);
+    return Image.network(this.imageURL);
   }
 }
 
-class Quantity extends StatelessWidget {
+class DisplayQuantity extends StatelessWidget {
   final int quantity;
-  Quantity({this.quantity});
+  DisplayQuantity({this.quantity});
 
   @override
   Widget build(BuildContext context) {
-    return Text(quantity.toString());
+    return Text('Items: ' + quantity.toString());
   }
 }
 
-class Coords extends StatelessWidget {
+class DisplayCoords extends StatelessWidget {
   final int lat;
   final int long;
 
-  Coords({this.lat, this.long});
+  DisplayCoords({this.lat, this.long});
 
   @override
   Widget build(BuildContext context) {

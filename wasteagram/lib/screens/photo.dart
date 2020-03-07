@@ -31,7 +31,7 @@ class _PhotoState extends State<Photo> {
     print(url);
     Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => NewPost(url)),
+              MaterialPageRoute(builder: (context) => NewPost()),
             );
   }
 
