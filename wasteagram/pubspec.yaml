@@ -20,6 +20,7 @@ dev_dependencies:
   firebase_storage: ^3.0.10
   firebase_core: 0.4.4
   firebase_auth: 0.15.0
+  transparent_image: 1.0.0
 
 dependency_overrides:
 

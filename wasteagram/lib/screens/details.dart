@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 import '../models/post.dart';
 
@@ -55,7 +55,23 @@ class DisplayImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.network(this.imageURL);
+    return Stack(
+      children: [
+        Container(
+          height:300,
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+        Center(
+          child: FadeInImage.memoryNetwork(
+            height:300,
+            placeholder: kTransparentImage,
+            image: this.imageURL,
+          )),
+        ]
+    );
+      //return Image.network(this.imageURL);
   }
 }
 
