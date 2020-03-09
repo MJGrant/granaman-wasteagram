@@ -12,6 +12,7 @@ dependencies:
   image_picker: 0.6.3
   intl: ^0.16.1
   cupertino_icons: ^0.1.2
+  location: ^2.5.3
 
 dev_dependencies:
   flutter_test:

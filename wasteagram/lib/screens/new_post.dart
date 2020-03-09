@@ -1,12 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'dart:io';
-
-import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:location/location.dart';
 import 'package:path/path.dart' as Path;
 
 class NewPost extends StatelessWidget {
@@ -35,11 +35,11 @@ class AddEntryForm extends StatefulWidget {
 }
 
 class _AddEntryFormState extends State<AddEntryForm> {
+
   File _image;
   var image;
 
   final formKey = GlobalKey<FormState>();
-
   final postEntryFields = PostEntryFields();
 
   Future getImage() async {
@@ -126,6 +126,11 @@ class _AddEntryFormState extends State<AddEntryForm> {
     if (formState.validate()) {
       formKey.currentState.save();
 
+      LocationData locationData;
+
+      var locationService = Location();
+      locationData = await locationService.getLocation();
+
       Scaffold.of(context).showSnackBar(SnackBar(content: Text('Creating post...')));
 
       // todo: add timestamp to name
@@ -140,8 +145,8 @@ class _AddEntryFormState extends State<AddEntryForm> {
       await Firestore.instance.collection('posts').add({
         'date': DateTime.now().toString(),
         'imageURL': postEntryFields.photoURL,
-        'latitude': 12345,
-        'longitude': 98765,
+        'latitude': locationData.latitude.toString(),
+        'longitude': locationData.longitude.toString(),
         'quantity': int.parse(postEntryFields.quantity),
       });
 

@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Post {
   String date;
   String imageURL;
-  int latitude;
-  int longitude;
+  String latitude;
+  String longitude;
   int quantity;
 
   Post(DocumentSnapshot document) {

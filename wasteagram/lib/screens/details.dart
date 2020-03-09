@@ -86,17 +86,13 @@ class DisplayQuantity extends StatelessWidget {
 }
 
 class DisplayCoords extends StatelessWidget {
-  final int lat;
-  final int long;
+  final String lat;
+  final String long;
 
   DisplayCoords({this.lat, this.long});
 
   @override
   Widget build(BuildContext context) {
-    return Text('(' +
-        lat.toString() +
-        ', ' +
-        long.toString() +
-        ')');
+    return Text('($lat, $long)');
   }
 }
