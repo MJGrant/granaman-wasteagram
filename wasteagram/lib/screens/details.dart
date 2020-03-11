@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../models/post.dart';
+
+import '../styles.dart';
+import '../util.dart';
 
 class Details extends StatelessWidget {
   static const routeName = 'Details';
@@ -13,7 +15,7 @@ class Details extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Wasteagram')),
+      appBar: AppBar(title: Text('Wasteagram', style: Styles.appTitle)),
       body: MergeSemantics(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -34,11 +36,6 @@ class DisplayDateHeadline extends StatelessWidget {
   final String date;
   DisplayDateHeadline({this.date});
 
-  String formatDate(date) {
-    var dateParsed = DateTime.parse(date);
-    final DateFormat dateFormat = DateFormat("EEEE, MMM. d yyyy");
-    return dateFormat.format(dateParsed).toString();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +46,8 @@ class DisplayDateHeadline extends StatelessWidget {
         readOnly: true,
         header: true,
         label: "Post title",
-        value: formatDate(date),
-        child: Text(formatDate(date),
-          style: Theme.of(context).textTheme.headline),
+        value: Util.formatDateWithYear(date),
+        child: Text(Util.formatDateWithYear(date), style: Styles.postTitle),
       ),
     );
   }
@@ -99,7 +95,7 @@ class DisplayQuantity extends StatelessWidget {
       value: quantity.toString(),
       child: Padding(
         padding: EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
-        child: Text('Items: ' + quantity.toString(), style: TextStyle(fontSize:18))
+        child: Text('Items: ' + quantity.toString(), style: Styles.detailsItemsCount)
       )
     );
   }
@@ -116,7 +112,7 @@ class DisplayCoords extends StatelessWidget {
     return Semantics(
       label: "Lat and Long coordinates",
       value: '$lat, $long',
-      child: Text('($lat, $long)', style: TextStyle(color: Colors.grey))
+      child: Text('($lat, $long)', style: Styles.detailsCoords)
     );
   }
 }

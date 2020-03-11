@@ -9,6 +9,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:location/location.dart';
 import 'package:path/path.dart' as Path;
 
+import '../styles.dart';
+
 class NewPost extends StatelessWidget {
   static const routeName = 'NewPost';
 
@@ -19,7 +21,7 @@ class NewPost extends StatelessWidget {
   Widget build(BuildContext context) {
     print(image);
     return Scaffold(
-      appBar: AppBar(title: Text('New Post')),
+      appBar: AppBar(title: Text('Wasteagram', style: Styles.appTitle)),
       body: SingleChildScrollView(
         child: AddEntryForm(image),
       ),
@@ -50,18 +52,6 @@ class _AddEntryFormState extends State<AddEntryForm> {
 
   final formKey = GlobalKey<FormState>();
   final postEntryFields = PostEntryFields();
-
-
-  /*
-  Future getImage() async {
-    image = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-    // updates the preview
-    setState(() {
-      _image = image;
-    });
-  }
-*/
 
   @override
   Widget build(BuildContext context) {
@@ -101,9 +91,7 @@ class _AddEntryFormState extends State<AddEntryForm> {
 
   Widget _quantityFormField() {
     return TextFormField(
-      autofocus: true,
-      decoration:
-      InputDecoration(labelText: 'Number of items'),
+      decoration: InputDecoration(labelText: 'Number of items'),
       keyboardType: TextInputType.number,
       inputFormatters: <TextInputFormatter>[
         WhitelistingTextInputFormatter.digitsOnly

@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'models/post.dart';
 
@@ -8,8 +7,10 @@ import 'screens/details.dart';
 import 'screens/new_post.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:image_picker/image_picker.dart';
+
+import 'styles.dart';
+import 'util.dart';
 
 void main() => runApp(App());
 
@@ -57,19 +58,6 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
-  String formatDate(date) {
-    var dateParsed = DateTime.parse(date);
-    final DateFormat dateFormat = DateFormat("EEEE, MMM. d");
-
-    return dateFormat.format(dateParsed).toString();
-  }
-
-  String formatTimestamp(date) {
-    var timestampParsed = DateTime.parse(date);
-    final DateFormat timestampFormat = DateFormat("jm");
-
-    return timestampFormat.format(timestampParsed).toString();
-  }
 
   void onTapped(post) {
     Navigator.push(
@@ -87,8 +75,8 @@ class _HomePageState extends State<HomePage> {
           child: Semantics(
             label:"Post title: ${post.date}",
             child: Text(
-              formatDate(post.date),
-              style: Theme.of(context).textTheme.headline,
+              Util.formatDate(post.date),
+              style: Styles.postTitle,
             ),
           ),
         ),
@@ -101,7 +89,7 @@ class _HomePageState extends State<HomePage> {
             ),
         ),
       ]),
-      subtitle: Text(formatTimestamp(post.date)),
+      subtitle: Text(Util.formatTimestamp(post.date)),
       onTap: () => onTapped(post),
     );
   }
@@ -110,7 +98,13 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Wasteagram - $totalWasted'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Wasteagram', style: Styles.appTitle),
+            Text(' - $totalWasted')
+          ]
+        ),
       ),
       body: Center(
         child: StreamBuilder(
