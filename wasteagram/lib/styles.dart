@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 class Styles {
 
-  static const _textSizeBigger = 18.0;
-
   static get appTitle =>
       TextStyle(
         fontFamily: 'OleoScript',
