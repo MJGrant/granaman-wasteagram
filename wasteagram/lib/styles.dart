@@ -24,4 +24,10 @@ class Styles {
         fontSize: 14,
         color: Colors.grey,
       );
+
+  static get mainQuantity =>
+      TextStyle(
+        fontSize: 20,
+        color: Colors.pink[200],
+      );
 }

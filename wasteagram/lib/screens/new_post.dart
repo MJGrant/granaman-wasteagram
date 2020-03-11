@@ -57,11 +57,9 @@ class _AddEntryFormState extends State<AddEntryForm> {
         padding: const EdgeInsets.fromLTRB(40.0, 20.0, 40.0, 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _imagePreview(),
             _quantityFormField(),
-            SizedBox(height: 40),
             _submitButton(),
           ]
         )
@@ -71,7 +69,6 @@ class _AddEntryFormState extends State<AddEntryForm> {
 
   Widget _imagePreview() {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         image == null
@@ -82,31 +79,44 @@ class _AddEntryFormState extends State<AddEntryForm> {
   }
 
   Widget _quantityFormField() {
-    return TextFormField(
-      decoration: InputDecoration(labelText: 'Number of items'),
-      keyboardType: TextInputType.number,
-      inputFormatters: <TextInputFormatter>[
-        WhitelistingTextInputFormatter.digitsOnly
-      ],
-      validator: (value) => validateQuantity(value),
-      onSaved: (value) {
-        postEntryFields.quantity = value;
-      }
+    return Container(
+      height:200,
+      child: TextFormField(
+        decoration: InputDecoration(labelText: 'Number of items'),
+        keyboardType: TextInputType.number,
+        inputFormatters: <TextInputFormatter>[
+          WhitelistingTextInputFormatter.digitsOnly
+        ],
+        validator: (value) => validateQuantity(value),
+        onSaved: (value) {
+          postEntryFields.quantity = value;
+        }
+      ),
     );
   }
 
 
   Widget _submitButton() {
-    return SizedBox(
-      width: 300,
-      height: 160,
-      child: Semantics(
-        label:"Submit post button",
-        hint:"Submits a new post",
-        child: RaisedButton(
-          color: Colors.grey[300],
-          onPressed: () => validateAndSave(context),
-          child: Icon(Icons.cloud_upload)),
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: SizedBox(
+        width: 260,
+        height: 120,
+        child: Semantics(
+          label:"Submit post button",
+          hint:"Submits a new post",
+          child: RaisedButton(
+            color: Colors.green[100],
+            onPressed: () => validateAndSave(context),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.cloud_upload),
+                Text("Submit post"),
+              ]
+            ),
+          ),
+        ),
       ),
     );
   }

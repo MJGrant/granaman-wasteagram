@@ -28,7 +28,7 @@ class App extends StatelessWidget {
       routes: routes,
       title: 'Wasteagram',
       theme: ThemeData(
-        primarySwatch: Colors.pink,
+        primarySwatch: Colors.green,
       ),
       home: HomePage(),
     );
@@ -70,25 +70,26 @@ class _HomePageState extends State<HomePage> {
   Widget _buildListItem(BuildContext context, Post post) {
 
     return ListTile(
-      title: Row(children: [
-        Expanded(
-          child: Semantics(
-            label:"Post title: ${post.date}",
-            child: Text(
-              Util.formatDate(post.date),
-              style: Styles.postTitle,
-            ),
-          ),
-        ),
-        Expanded(
+      title: Row(
+        children: [
+          Expanded(
             child: Semantics(
-              label: "Quantity: ${post.quantity.toString()}",
+              label:"Post title: ${post.date}",
               child: Text(
-                post.quantity.toString(),
+                Util.formatDate(post.date),
+                style: Styles.postTitle,
               ),
             ),
-        ),
-      ]),
+          ),
+          Semantics(
+            label: "Quantity: ${post.quantity.toString()}",
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(post.quantity.toString(), style: Styles.mainQuantity),
+            ),
+          ),
+        ],
+      ),
       subtitle: Text(Util.formatTimestamp(post.date)),
       onTap: () => onTapped(post),
     );
