@@ -45,17 +45,23 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  File image;
   var totalWasted = 0;
   _HomePageState();
 
-  Future getImage() async {
-    image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    Navigator.push(
-        context,
+  void pickImage(BuildContext context) async {
+    final navigator = Navigator.of(context);
+    File pickedImage = await ImagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      print(pickedImage.path);
+      await navigator.push(
         MaterialPageRoute(
-          builder: (context) => NewPost(image: image),
-        ));
+          builder: (context) =>
+              NewPost(
+                localImagePath: pickedImage.path,
+              ),
+        ),
+      );
+    }
   }
 
 
@@ -144,7 +150,7 @@ class _HomePageState extends State<HomePage> {
         label:"New post button",
         hint:"Use this button to add a new post",
         child: FloatingActionButton(
-          onPressed: getImage,
+          onPressed: () => pickImage(context),
           tooltip: 'New Post',
           child: Icon(Icons.add),
         ),

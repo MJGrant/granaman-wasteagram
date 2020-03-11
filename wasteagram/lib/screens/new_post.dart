@@ -14,15 +14,15 @@ import '../styles.dart';
 class NewPost extends StatelessWidget {
   static const routeName = 'NewPost';
 
-  final File image;
-  NewPost({this.image});
+  final String localImagePath;
+  NewPost({this.localImagePath});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Wasteagram', style: Styles.appTitle)),
       body: SingleChildScrollView(
-        child: AddEntryForm(image),
+        child: AddEntryForm(localImagePath),
       ),
     );
   }
@@ -34,17 +34,17 @@ class PostEntryFields {
 }
 
 class AddEntryForm extends StatefulWidget {
-  final File image;
-  AddEntryForm(this.image);
+  final String localImagePath;
+  AddEntryForm(this.localImagePath);
 
   @override
-  _AddEntryFormState createState() => _AddEntryFormState(image);
+  _AddEntryFormState createState() => _AddEntryFormState(localImagePath);
 }
 
 class _AddEntryFormState extends State<AddEntryForm> {
-  final File image;
+  final String localImagePath;
 
-  _AddEntryFormState(this.image);
+  _AddEntryFormState(this.localImagePath);
 
   final formKey = GlobalKey<FormState>();
   final postEntryFields = PostEntryFields();
@@ -71,9 +71,9 @@ class _AddEntryFormState extends State<AddEntryForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        image == null
+        localImagePath == null
             ? Text('No image selected.')
-            : Image.file(image),
+            : Image.file(File(localImagePath)),
       ]
     );
   }
@@ -142,11 +142,11 @@ class _AddEntryFormState extends State<AddEntryForm> {
 
       Scaffold.of(context).showSnackBar(SnackBar(content: Text('Creating post...')));
 
-      StorageReference storageReference = FirebaseStorage.instance.ref().child(Path.basename(image.path));
+      StorageReference storageReference = FirebaseStorage.instance.ref().child(Path.basename(localImagePath));
 
       // actually upload the image
       // do this only when form is valid, and hold the completion until the url is returned
-      StorageUploadTask uploadTask = storageReference.putFile(image);
+      StorageUploadTask uploadTask = storageReference.putFile(File(localImagePath));
       await uploadTask.onComplete;
       postEntryFields.photoURL = await storageReference.getDownloadURL();
 
