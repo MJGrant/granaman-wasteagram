@@ -31,26 +31,25 @@ class Details extends StatelessWidget {
 }
 
 class DisplayDateHeadline extends StatelessWidget {
-
   final String date;
   DisplayDateHeadline({this.date});
 
   String formatDate(date) {
     var dateParsed = DateTime.parse(date);
     final DateFormat dateFormat = DateFormat("EEEE, MMM. d yyyy");
-
     return dateFormat.format(dateParsed).toString();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Padding(
+      padding: EdgeInsets.fromLTRB(0, 8.0, 0, 0),
       child: Semantics(
-        textField:true,
-        readOnly:true,
-        header:true,
-        label:"Post title",
-        value:formatDate(date),
+        textField: true,
+        readOnly: true,
+        header: true,
+        label: "Post title",
+        value: formatDate(date),
         child: Text(formatDate(date),
           style: Theme.of(context).textTheme.headline),
       ),
@@ -70,7 +69,7 @@ class DisplayImage extends StatelessWidget {
           height:300,
           child: Center(
             child: Semantics(
-              label:"Progress indicator",
+              label: "Progress indicator",
               child: CircularProgressIndicator(),
             ),
           ),
@@ -79,14 +78,13 @@ class DisplayImage extends StatelessWidget {
           child: Semantics(
             label: "Photo of food items going to waste",
             child: FadeInImage.memoryNetwork(
-              height:300,
+              height: 300,
               placeholder: kTransparentImage,
               image: this.imageURL,
             ),
           )),
         ]
-    );
-      //return Image.network(this.imageURL);
+    );//return Image.network(this.imageURL);
   }
 }
 
@@ -99,7 +97,10 @@ class DisplayQuantity extends StatelessWidget {
     return Semantics(
       label: "Item count",
       value: quantity.toString(),
-      child: Text('Items: ' + quantity.toString())
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
+        child: Text('Items: ' + quantity.toString(), style: TextStyle(fontSize:18))
+      )
     );
   }
 }
@@ -115,7 +116,7 @@ class DisplayCoords extends StatelessWidget {
     return Semantics(
       label: "Lat and Long coordinates",
       value: '$lat, $long',
-      child: Text('($lat, $long)')
+      child: Text('($lat, $long)', style: TextStyle(color: Colors.grey))
     );
   }
 }
