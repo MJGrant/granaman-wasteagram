@@ -71,7 +71,7 @@ class _AddEntryFormState extends State<AddEntryForm> {
     return Stack(
         children: [
           Container(
-            height: 300,
+            height: 330,
             child: Center(
               child: Semantics(
                 label: "Progress indicator",
@@ -86,7 +86,7 @@ class _AddEntryFormState extends State<AddEntryForm> {
         ]
     );
   }
-  
+
   Widget _quantityFormField() {
     return Container(
       height:200,

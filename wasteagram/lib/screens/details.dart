@@ -36,11 +36,10 @@ class DisplayDateHeadline extends StatelessWidget {
   final String date;
   DisplayDateHeadline({this.date});
 
-
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(0, 8.0, 0, 0),
+      padding: EdgeInsets.fromLTRB(0, 18.0, 0, 8.0),
       child: Semantics(
         textField: true,
         readOnly: true,
@@ -59,28 +58,33 @@ class DisplayImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          height:300,
-          child: Center(
-            child: Semantics(
-              label: "Progress indicator",
-              child: CircularProgressIndicator(),
+    return Container(
+      height:300,
+      child: Stack(
+          children: [
+            Container(
+              color: Colors.grey[100],
+              child: Center(
+                child: Semantics(
+                  label: "Progress indicator",
+                  child: CircularProgressIndicator(),
+                ),
+              ),
             ),
-          ),
+            Positioned.fill(
+              child: Semantics(
+                  label: "Photo of food items going to waste",
+                  child: FadeInImage.memoryNetwork(
+                    height: 300,
+                    placeholder: kTransparentImage,
+                    image: this.imageURL,
+                  ),
+              ),
+            ),
+          ]
         ),
-        Center(
-          child: Semantics(
-            label: "Photo of food items going to waste",
-            child: FadeInImage.memoryNetwork(
-              height: 300,
-              placeholder: kTransparentImage,
-              image: this.imageURL,
-            ),
-          )),
-        ]
-    );//return Image.network(this.imageURL);
+      );
+     //return Image.network(this.imageURL);
   }
 }
 
@@ -94,7 +98,7 @@ class DisplayQuantity extends StatelessWidget {
       label: "Item count",
       value: quantity.toString(),
       child: Padding(
-        padding: EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
+        padding: EdgeInsets.fromLTRB(0, 6.0, 0, 6.0),
         child: Text('Items: ' + quantity.toString(), style: Styles.detailsItemsCount)
       )
     );
