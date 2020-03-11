@@ -5,17 +5,16 @@ import 'models/post.dart';
 
 import 'screens/details.dart';
 import 'screens/new_post.dart';
-import 'screens/photo.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(App());
 
-class MyApp extends StatelessWidget {
+class App extends StatelessWidget {
   static const routeName = '/';
 
   final routes = {
-    Photo.routeName: (context) => NewPost(),
+    NewPost.routeName: (context) => NewPost(),
     Details.routeName: (context) => Details(),
   };
 
@@ -27,19 +26,19 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      home: MyHomePage(),
+      home: HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  HomePage({Key key}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   var totalWasted = 0;
 
   String formatDate(date) {
@@ -69,15 +68,22 @@ class _MyHomePageState extends State<MyHomePage> {
     return ListTile(
       title: Row(children: [
         Expanded(
-          child: Text(
-            formatDate(post.date),
-            style: Theme.of(context).textTheme.headline,
+          child: Semantics(
+            label:"Post title: ${post.date}",
+            child: Text(
+              formatDate(post.date),
+              style: Theme.of(context).textTheme.headline,
+            ),
           ),
         ),
         Expanded(
-            child: Text(
-              post.quantity.toString(),
-        ))
+            child: Semantics(
+              label: "Quantity: ${post.quantity.toString()}",
+              child: Text(
+                post.quantity.toString(),
+              ),
+            ),
+        ),
       ]),
       subtitle: Text(formatTimestamp(post.date)),
       onTap: () => onTapped(post),
@@ -109,18 +115,27 @@ class _MyHomePageState extends State<MyHomePage> {
                         context, post);
                   });
             } else {
-              return Center(child: CircularProgressIndicator());
+              return Center(
+                  child: Semantics(
+                    label:"Loading progress indicator",
+                    child: CircularProgressIndicator()
+                  ),
+              );
             }
           },
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await Navigator.pushNamed(context, 'Photo');
-        },
-        tooltip: 'New Post',
-        child: Icon(Icons.add),
+      floatingActionButton: Semantics(
+        label:"New post button",
+        hint:"Use this button to add a new post",
+        child: FloatingActionButton(
+          onPressed: () async {
+            await Navigator.pushNamed(context, 'NewPost');
+          },
+          tooltip: 'New Post',
+          child: Icon(Icons.add),
+        ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

@@ -14,17 +14,19 @@ class Details extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Wasteagram')),
-      body: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              DisplayDateHeadline(date: post.date),
-              DisplayImage(imageURL: post.imageURL),
-              DisplayQuantity(quantity: post.quantity),
-              DisplayCoords(lat: post.latitude, long: post.longitude)
-            ],
-          ),
-        );
+      body: MergeSemantics(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            DisplayDateHeadline(date: post.date),
+            DisplayImage(imageURL: post.imageURL),
+            DisplayQuantity(quantity: post.quantity),
+            DisplayCoords(lat: post.latitude, long: post.longitude)
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -43,8 +45,15 @@ class DisplayDateHeadline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(formatDate(date),
+      child: Semantics(
+        textField:true,
+        readOnly:true,
+        header:true,
+        label:"Post title",
+        value:formatDate(date),
+        child: Text(formatDate(date),
           style: Theme.of(context).textTheme.headline),
+      ),
     );
   }
 }
@@ -60,14 +69,20 @@ class DisplayImage extends StatelessWidget {
         Container(
           height:300,
           child: Center(
-            child: CircularProgressIndicator(),
+            child: Semantics(
+              label:"Progress indicator",
+              child: CircularProgressIndicator(),
+            ),
           ),
         ),
         Center(
-          child: FadeInImage.memoryNetwork(
-            height:300,
-            placeholder: kTransparentImage,
-            image: this.imageURL,
+          child: Semantics(
+            label: "Photo of food items going to waste",
+            child: FadeInImage.memoryNetwork(
+              height:300,
+              placeholder: kTransparentImage,
+              image: this.imageURL,
+            ),
           )),
         ]
     );
@@ -81,7 +96,11 @@ class DisplayQuantity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text('Items: ' + quantity.toString());
+    return Semantics(
+      label: "Item count",
+      value: quantity.toString(),
+      child: Text('Items: ' + quantity.toString())
+    );
   }
 }
 
@@ -93,6 +112,10 @@ class DisplayCoords extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text('($lat, $long)');
+    return Semantics(
+      label: "Lat and Long coordinates",
+      value: '$lat, $long',
+      child: Text('($lat, $long)')
+    );
   }
 }

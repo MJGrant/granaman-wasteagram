@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'new_post.dart';
 import 'dart:io';
@@ -67,10 +68,16 @@ class ChoosePhoto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: RaisedButton(
+        child: Semantics(
+          button:true,
+          enabled:true,
+          hint:"Tap this button to choose a photo",
+          child: RaisedButton(
             child: Text('Choose Photo'),
             onPressed: getImage
+          ),
         )
     );
   }
 }
+*/

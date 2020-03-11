@@ -10,7 +10,7 @@ import 'package:location/location.dart';
 import 'package:path/path.dart' as Path;
 
 class NewPost extends StatelessWidget {
-  static const routeName = 'newPost';
+  static const routeName = 'NewPost';
 
   @override
   Widget build(BuildContext context) {
@@ -105,10 +105,14 @@ class _AddEntryFormState extends State<AddEntryForm> {
     return SizedBox(
       width: 300,
       height: 160,
-      child: RaisedButton(
+      child: Semantics(
+        label:"Submit post button",
+        hint:"Submits a new post",
+        child: RaisedButton(
           color: Colors.grey[300],
           onPressed: () => validateAndSave(context),
           child: Icon(Icons.cloud_upload)),
+      ),
     );
   }
 
