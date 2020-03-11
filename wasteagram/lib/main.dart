@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
         MaterialPageRoute(
           builder: (context) => NewPost(image: image),
         ));
-  }9
+  }
 
   String formatDate(date) {
     var dateParsed = DateTime.parse(date);
