@@ -5,19 +5,23 @@ import 'package:flutter/services.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
+
 import 'package:location/location.dart';
 import 'package:path/path.dart' as Path;
 
 class NewPost extends StatelessWidget {
   static const routeName = 'NewPost';
 
+  final File image;
+  NewPost({this.image});
+
   @override
   Widget build(BuildContext context) {
+    print(image);
     return Scaffold(
       appBar: AppBar(title: Text('New Post')),
       body: SingleChildScrollView(
-        child: AddEntryForm(),
+        child: AddEntryForm(image),
       ),
     );
   }
@@ -30,18 +34,25 @@ class PostEntryFields {
 
 class AddEntryForm extends StatefulWidget {
 
+  final File image;
+  AddEntryForm(this.image);
+
   @override
-  _AddEntryFormState createState() => _AddEntryFormState();
+  _AddEntryFormState createState() => _AddEntryFormState(image);
 }
 
 class _AddEntryFormState extends State<AddEntryForm> {
 
-  File _image;
-  var image;
+  //File _image;
+  final File image;
+
+  _AddEntryFormState(this.image);
 
   final formKey = GlobalKey<FormState>();
   final postEntryFields = PostEntryFields();
 
+
+  /*
   Future getImage() async {
     image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
@@ -50,9 +61,13 @@ class _AddEntryFormState extends State<AddEntryForm> {
       _image = image;
     });
   }
+*/
 
   @override
   Widget build(BuildContext context) {
+
+    print(image);
+
     return Form(
       key: formKey,
       child: Padding(
@@ -76,10 +91,10 @@ class _AddEntryFormState extends State<AddEntryForm> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _image == null
+        image == null
             ? Text('No image selected.')
-            : Image.file(_image),
-        ChoosePhoto(getImage),
+            : Image.file(image),
+        //ChoosePhoto(getImage),
       ]
     );
   }

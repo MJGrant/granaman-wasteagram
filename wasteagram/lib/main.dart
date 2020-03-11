@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -7,6 +8,8 @@ import 'screens/details.dart';
 import 'screens/new_post.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:image_picker/image_picker.dart';
 
 void main() => runApp(App());
 
@@ -32,6 +35,7 @@ class App extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
+
   HomePage({Key key}) : super(key: key);
 
   @override
@@ -39,7 +43,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  File image;
   var totalWasted = 0;
+  _HomePageState();
+
+  Future getImage() async {
+    image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => NewPost(image: image),
+        ));
+  }9
 
   String formatDate(date) {
     var dateParsed = DateTime.parse(date);
@@ -130,9 +146,7 @@ class _HomePageState extends State<HomePage> {
         label:"New post button",
         hint:"Use this button to add a new post",
         child: FloatingActionButton(
-          onPressed: () async {
-            await Navigator.pushNamed(context, 'NewPost');
-          },
+          onPressed: getImage,
           tooltip: 'New Post',
           child: Icon(Icons.add),
         ),
