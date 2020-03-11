@@ -35,7 +35,6 @@ class PostEntryFields {
 }
 
 class AddEntryForm extends StatefulWidget {
-
   final File image;
   AddEntryForm(this.image);
 
@@ -44,8 +43,6 @@ class AddEntryForm extends StatefulWidget {
 }
 
 class _AddEntryFormState extends State<AddEntryForm> {
-
-  //File _image;
   final File image;
 
   _AddEntryFormState(this.image);
@@ -55,9 +52,6 @@ class _AddEntryFormState extends State<AddEntryForm> {
 
   @override
   Widget build(BuildContext context) {
-
-    print(image);
-
     return Form(
       key: formKey,
       child: Padding(
@@ -84,7 +78,6 @@ class _AddEntryFormState extends State<AddEntryForm> {
         image == null
             ? Text('No image selected.')
             : Image.file(image),
-        //ChoosePhoto(getImage),
       ]
     );
   }
@@ -140,7 +133,6 @@ class _AddEntryFormState extends State<AddEntryForm> {
 
       Scaffold.of(context).showSnackBar(SnackBar(content: Text('Creating post...')));
 
-      // todo: add timestamp to name
       StorageReference storageReference = FirebaseStorage.instance.ref().child(Path.basename(image.path));
 
       // actually upload the image
@@ -163,7 +155,6 @@ class _AddEntryFormState extends State<AddEntryForm> {
 }
 
 class ChoosePhoto extends StatelessWidget {
-
   final getImage;
   ChoosePhoto(this.getImage);
 
