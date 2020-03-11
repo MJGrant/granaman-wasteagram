@@ -116,10 +116,13 @@ class _HomePageState extends State<HomePage> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               totalWasted = 0;
-              return ListView.builder(
-                  padding: EdgeInsets.all(8),
-                  itemCount: snapshot.data.documents.length,
-                  itemBuilder: (context, index) {
+              return ListView.separated(
+                separatorBuilder: (context, index) => Divider(
+                  color: Colors.green
+                ),
+                padding: EdgeInsets.all(8),
+                itemCount: snapshot.data.documents.length,
+                itemBuilder: (context, index) {
                     Post post = Post(snapshot.data.documents[index]);
                     totalWasted += post.quantity;
                     return _buildListItem(
