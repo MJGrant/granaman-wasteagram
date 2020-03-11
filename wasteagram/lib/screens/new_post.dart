@@ -68,16 +68,25 @@ class _AddEntryFormState extends State<AddEntryForm> {
   }
 
   Widget _imagePreview() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        localImagePath == null
-            ? Text('No image selected.')
-            : Image.file(File(localImagePath)),
-      ]
+    return Stack(
+        children: [
+          Container(
+            height: 300,
+            child: Center(
+              child: Semantics(
+                label: "Progress indicator",
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          ),
+          Center(
+              child: localImagePath == null ? Text('No image selected.') : Image
+                  .file(File(localImagePath))
+          ),
+        ]
     );
   }
-
+  
   Widget _quantityFormField() {
     return Container(
       height:200,
