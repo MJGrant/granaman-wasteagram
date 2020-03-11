@@ -56,7 +56,7 @@ class _AddEntryFormState extends State<AddEntryForm> {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(40.0, 20.0, 40.0, 20.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _imagePreview(),
             _quantityFormField(),
@@ -71,7 +71,7 @@ class _AddEntryFormState extends State<AddEntryForm> {
     return Stack(
         children: [
           Container(
-            height: 330,
+            height: 260,
             child: Center(
               child: Semantics(
                 label: "Progress indicator",
@@ -89,7 +89,7 @@ class _AddEntryFormState extends State<AddEntryForm> {
 
   Widget _quantityFormField() {
     return Container(
-      height:200,
+      height:100,
       child: TextFormField(
         decoration: InputDecoration(labelText: 'Number of items'),
         keyboardType: TextInputType.number,
@@ -109,8 +109,8 @@ class _AddEntryFormState extends State<AddEntryForm> {
     return Align(
       alignment: Alignment.bottomCenter,
       child: SizedBox(
-        width: 260,
-        height: 120,
+        width: 240,
+        height: 90,
         child: Semantics(
           label:"Submit post button",
           hint:"Submits a new post",
