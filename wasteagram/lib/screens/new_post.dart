@@ -19,7 +19,6 @@ class NewPost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(image);
     return Scaffold(
       appBar: AppBar(title: Text('Wasteagram', style: Styles.appTitle)),
       body: SingleChildScrollView(
