@@ -165,12 +165,12 @@ class _AddEntryFormState extends State<AddEntryForm> {
       // pop the snack bar up
       Scaffold.of(context).showSnackBar(SnackBar(content: Text('Posting...')));
 
-      // is there an image to upload? if yes, upload it now
+      // see if there's an image to upload, and if so, upload it
       if (localImagePath == '' || localImagePath == null) {
         postEntryFields.photoURL = '';
       } else {
         StorageReference storageReference = FirebaseStorage.instance.ref()
-            .child(Path.basename(localImagePath));
+            .child(Path.basename(DateTime.now().toString()));
 
         // actually upload the image
         // do this only when form is valid, and hold the completion until the url is returned
