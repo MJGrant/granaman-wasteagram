@@ -9,22 +9,62 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:wasteagram/main.dart';
+import '../lib/screens/new_post.dart';
+import '../lib/screens/details.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mockito/mockito.dart';
+
+import '../lib/models/post.dart';
+
+class MockPost extends Mock implements Post {}
+class MockSnapshot extends Mock implements DocumentSnapshot {}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  DocumentSnapshot doc = MockSnapshot();
+  Post mockPost = Post(doc);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+  // mock post
+  mockPost.date = '2020-03-11 20:21:31.239663';
+  mockPost.latitude = '47.704296';
+  mockPost.longitude = '-122.215157';
+  mockPost.quantity = 10;
+  mockPost.imageURL = '';
+
+  testWidgets('Main page is properly formed', (WidgetTester tester) async {
+    await tester.pumpWidget(App());
+    expect(find.text('Wasteagram'), findsOneWidget);
+    expect(find.byKey(Key('newPostButton')), findsOneWidget);
+  });
+
+  testWidgets('New Post form is properly formed', (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(home: NewPost()));
+
+    expect(find.byKey(Key('photoPreview')), findsOneWidget);
+    expect(find.byType(TextFormField), findsOneWidget);
+    expect(find.byType(RaisedButton), findsOneWidget);
+  });
+
+  testWidgets('Form cannot be submitted empty', (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(home: NewPost()));
+
+    final Finder submit = find.byKey(Key('submitButton'));
+
+    await tester.tap(submit);
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text('Please enter a quantity'), findsOneWidget);
+    expect(find.text('Posting...'), findsNothing);
   });
+
+  testWidgets('Details page is properly formed', (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(home: Details(post: mockPost)));
+
+    expect(find.byKey(Key('displayDateHeadline')), findsOneWidget);
+    expect(find.byKey(Key('displayImage')), findsOneWidget);
+    expect(find.byKey(Key('displayQuantity')), findsOneWidget);
+    expect(find.byKey(Key('displayCoords')), findsOneWidget);
+  });
+
 }

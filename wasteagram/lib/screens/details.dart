@@ -17,15 +17,17 @@ class Details extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Wasteagram', style: Styles.appTitle)),
       body: MergeSemantics(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            DisplayDateHeadline(date: post.date),
-            DisplayImage(imageURL: post.imageURL),
-            DisplayQuantity(quantity: post.quantity),
-            DisplayCoords(lat: post.latitude, long: post.longitude)
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              DisplayDateHeadline(date: post.date),
+              DisplayImage(imageURL: post.imageURL),
+              DisplayQuantity(quantity: post.quantity),
+              DisplayCoords(lat: post.latitude, long: post.longitude)
+            ],
+          ),
         ),
       ),
     );
@@ -41,6 +43,7 @@ class DisplayDateHeadline extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.fromLTRB(0, 18.0, 0, 8.0),
       child: Semantics(
+        key: Key('displayDateHeadline'),
         textField: true,
         readOnly: true,
         header: true,
@@ -59,32 +62,51 @@ class DisplayImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height:300,
-      child: Stack(
-          children: [
-            Container(
-              color: Colors.grey[100],
-              child: Center(
-                child: Semantics(
-                  label: "Progress indicator",
-                  child: CircularProgressIndicator(),
+        key: Key('displayImage'),
+        height:300,
+        child: Stack(
+            children: [
+              Container(
+                color: Colors.grey[100],
+                child: Center(
+                  child: Semantics(
+                    label: "Progress indicator",
+                    child: imageURL != '' ? CircularProgressIndicator() : Text('No image saved'),
+                  ),
                 ),
               ),
+              ConditionalImage(imageURL),
+            ]
+          ),
+      );//return Image.network(this.imageURL);
+  }
+}
+
+class ConditionalImage extends StatelessWidget {
+  final imageURL;
+
+  ConditionalImage(this.imageURL);
+
+  @override
+  Widget build(BuildContext context) {
+    if (imageURL != '' && imageURL != null) {
+      print(imageURL);
+      return Positioned.fill(
+          child: Semantics(
+            label: "Photo of food items going to waste",
+            child: FadeInImage.memoryNetwork(
+              height: 300,
+              placeholder: kTransparentImage,
+              image: this.imageURL,
             ),
-            Positioned.fill(
-              child: Semantics(
-                  label: "Photo of food items going to waste",
-                  child: FadeInImage.memoryNetwork(
-                    height: 300,
-                    placeholder: kTransparentImage,
-                    image: this.imageURL,
-                  ),
-              ),
-            ),
-          ]
-        ),
+          ));
+    } else {
+      return Positioned.fill(
+          child: Semantics(
+            label: "No image saved to this post",
+          )
       );
-     //return Image.network(this.imageURL);
+    }
   }
 }
 
@@ -95,6 +117,7 @@ class DisplayQuantity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
+      key: Key('displayQuantity'),
       label: "Item count",
       value: quantity.toString(),
       child: Padding(
@@ -114,6 +137,7 @@ class DisplayCoords extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
+      key: Key('displayCoords'),
       label: "Lat and Long coordinates",
       value: '$lat, $long',
       child: Text('($lat, $long)', style: Styles.detailsCoords)

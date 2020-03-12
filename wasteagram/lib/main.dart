@@ -36,7 +36,6 @@ class App extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
-
   HomePage({Key key}) : super(key: key);
 
   @override
@@ -44,7 +43,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   var totalWasted = 0;
   _HomePageState();
 
@@ -52,7 +50,6 @@ class _HomePageState extends State<HomePage> {
     final navigator = Navigator.of(context);
     File pickedImage = await ImagePicker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
-      print(pickedImage.path);
       await navigator.push(
         MaterialPageRoute(
           builder: (context) =>
@@ -64,7 +61,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-
   void onTapped(post) {
     Navigator.push(
         context,
@@ -74,7 +70,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildListItem(BuildContext context, Post post) {
-
     return ListTile(
       title: Row(
         children: [
@@ -109,7 +104,7 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Wasteagram', style: Styles.appTitle),
-            Text(' - $totalWasted')
+            totalWasted > 0 ? Text(' - $totalWasted') : Text(''),
           ]
         ),
       ),
@@ -120,7 +115,7 @@ class _HomePageState extends State<HomePage> {
               .orderBy('date', descending: true)
               .snapshots(),
           builder: (context, snapshot) {
-            if (snapshot.hasData) {
+            if (snapshot.hasData && !snapshot.data.documents.isEmpty) {
               totalWasted = 0;
               return ListView.separated(
                 separatorBuilder: (context, index) => Divider(
@@ -136,10 +131,17 @@ class _HomePageState extends State<HomePage> {
                   });
             } else {
               return Center(
-                  child: Semantics(
-                    label:"Loading progress indicator",
-                    child: CircularProgressIndicator()
+                child: Semantics(
+                  label:"Loading progress indicator",
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children:[
+                      Text('No posts yet!'),
+                      SizedBox(height:20),
+                      CircularProgressIndicator()
+                    ]
                   ),
+                ),
               );
             }
           },
@@ -150,6 +152,7 @@ class _HomePageState extends State<HomePage> {
         label:"New post button",
         hint:"Use this button to add a new post",
         child: FloatingActionButton(
+          key: Key('newPostButton'),
           onPressed: () => pickImage(context),
           tooltip: 'New Post',
           child: Icon(Icons.add),

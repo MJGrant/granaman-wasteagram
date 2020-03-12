@@ -69,6 +69,7 @@ class _AddEntryFormState extends State<AddEntryForm> {
 
   Widget _imagePreview() {
     return Stack(
+        key: Key('photoPreview'),
         children: [
           Container(
             height: 260,
@@ -115,6 +116,7 @@ class _AddEntryFormState extends State<AddEntryForm> {
           label:"Submit post button",
           hint:"Submits a new post",
           child: RaisedButton(
+            key: Key('submitButton'),
             color: Colors.green[100],
             onPressed: () => validateAndSave(context),
             child: Column(
@@ -149,7 +151,7 @@ class _AddEntryFormState extends State<AddEntryForm> {
       var locationService = Location();
       locationData = await locationService.getLocation();
 
-      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Creating post...')));
+      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Posting...')));
 
       StorageReference storageReference = FirebaseStorage.instance.ref().child(Path.basename(localImagePath));
 
