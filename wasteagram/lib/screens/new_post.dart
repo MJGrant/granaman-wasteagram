@@ -68,7 +68,18 @@ class _AddEntryFormState extends State<AddEntryForm> {
   }
 
   Widget _imagePreview() {
-    return Stack(
+    if (localImagePath == null || localImagePath == '') {
+      return Container(
+        height: 260,
+        child: Center(
+          child: Semantics(
+            label: 'Empty container, no image to display',
+            child: Text('No image selected')
+          )
+        )
+      );
+    } else {
+      return Stack(
         key: Key('photoPreview'),
         children: [
           Container(
@@ -81,11 +92,11 @@ class _AddEntryFormState extends State<AddEntryForm> {
             ),
           ),
           Center(
-              child: localImagePath == null ? Text('No image selected.') : Image
-                  .file(File(localImagePath))
+              child: Image.file(File(localImagePath))
           ),
         ]
-    );
+      );
+    }
   }
 
   Widget _quantityFormField() {
@@ -146,20 +157,28 @@ class _AddEntryFormState extends State<AddEntryForm> {
     if (formState.validate()) {
       formKey.currentState.save();
 
+      // lat and long info
       LocationData locationData;
-
       var locationService = Location();
       locationData = await locationService.getLocation();
 
+      // pop the snack bar up
       Scaffold.of(context).showSnackBar(SnackBar(content: Text('Posting...')));
 
-      StorageReference storageReference = FirebaseStorage.instance.ref().child(Path.basename(localImagePath));
+      // is there an image to upload? if yes, upload it now
+      if (localImagePath == '' || localImagePath == null) {
+        postEntryFields.photoURL = '';
+      } else {
+        StorageReference storageReference = FirebaseStorage.instance.ref()
+            .child(Path.basename(localImagePath));
 
-      // actually upload the image
-      // do this only when form is valid, and hold the completion until the url is returned
-      StorageUploadTask uploadTask = storageReference.putFile(File(localImagePath));
-      await uploadTask.onComplete;
-      postEntryFields.photoURL = await storageReference.getDownloadURL();
+        // actually upload the image
+        // do this only when form is valid, and hold the completion until the url is returned
+        StorageUploadTask uploadTask = storageReference.putFile(
+            File(localImagePath));
+        await uploadTask.onComplete;
+        postEntryFields.photoURL = await storageReference.getDownloadURL();
+      }
 
       await Firestore.instance.collection('posts').add({
         'date': DateTime.now().toString(),

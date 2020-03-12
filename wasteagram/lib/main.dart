@@ -8,6 +8,7 @@ import 'screens/new_post.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'styles.dart';
 import 'util.dart';
@@ -46,19 +47,32 @@ class _HomePageState extends State<HomePage> {
   var totalWasted = 0;
   _HomePageState();
 
-  void pickImage(BuildContext context) async {
-    final navigator = Navigator.of(context);
-    File pickedImage = await ImagePicker.pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
-      await navigator.push(
-        MaterialPageRoute(
-          builder: (context) =>
-              NewPost(
-                localImagePath: pickedImage.path,
-              ),
-        ),
-      );
+  Future<bool> checkAndRequestCameraPermissions() async {
+    PermissionStatus permission =
+    await PermissionHandler().checkPermissionStatus(PermissionGroup.photos);
+    if (permission != PermissionStatus.granted) {
+      Map<PermissionGroup, PermissionStatus> permissions =
+      await PermissionHandler().requestPermissions([PermissionGroup.photos]);
+      return permissions[PermissionGroup.photos] == PermissionStatus.granted;
+    } else {
+      return true;
     }
+  }
+
+  void pickImage(BuildContext context) async {
+    String pickedImagePath = '';
+    final navigator = Navigator.of(context);
+
+    if (await checkAndRequestCameraPermissions()) {
+      File pickedImage = await ImagePicker.pickImage(source: ImageSource.gallery);
+      pickedImagePath = pickedImage.path;
+    }
+
+    await navigator.push(
+      MaterialPageRoute(
+        builder: (context) => NewPost(localImagePath: pickedImagePath),
+      ),
+    );
   }
 
   void onTapped(post) {

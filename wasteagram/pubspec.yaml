@@ -23,6 +23,7 @@ dev_dependencies:
   firebase_auth: 0.15.0
   transparent_image: 1.0.0
   mockito: ^4.1.1
+  permission_handler: ^4.4.0+hotfix.1
 
 dependency_overrides:
 
