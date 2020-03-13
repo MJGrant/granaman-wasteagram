@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
 import 'package:location/location.dart';
 import 'package:path/path.dart' as Path;
 
@@ -70,6 +69,7 @@ class _AddEntryFormState extends State<AddEntryForm> {
   Widget _imagePreview() {
     if (localImagePath == null || localImagePath == '') {
       return Container(
+        key: Key('photoPreview'),
         height: 260,
         child: Center(
           child: Semantics(

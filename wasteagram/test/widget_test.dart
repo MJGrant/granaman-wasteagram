@@ -12,7 +12,6 @@ class MockPost extends Mock implements Post {}
 class MockSnapshot extends Mock implements DocumentSnapshot {}
 
 void main() {
-
   DocumentSnapshot doc = MockSnapshot();
   Post mockPost = Post(doc);
 
